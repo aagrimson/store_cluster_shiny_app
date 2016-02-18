@@ -6,36 +6,18 @@
 #
 
 library(shiny)
+library(shinythemes)
 library(tidyr)
 
 
-## ui.R
 
-# shinyUI(pageWithSidebar(
-#   
-#   headerPanel('k-means store clustering'),
-#   
-#   sidebarPanel(
-#     checkboxGroupInput('variables', 'Variables:', names(select(data, -LOCATION_ID))),
-#     numericInput('clusters', 'Cluster count', 3, min = 1, max = 9)
-#   ),
-#   
-#   mainPanel(
-#     plotOutput('plot1'),
-#     tableOutput('table1'),
-#     div(tableOutput('table2'), style = "font-size:70%")
-#     
-#   )
-# ))
-
-
-shinyUI(fluidPage(
+shinyUI(fluidPage(theme = shinytheme("spacelab"),
   titlePanel("Store Clustering"),
   fluidRow(
     column(3,
       wellPanel(
        h4("Customer Styles"),  
-       selectInput('variables', '', names(select(data, -LOCATION_ID)), multiple = TRUE),
+       selectInput('variables', '', names(select(data, -LOCATION_ID)), multiple = TRUE, selected = names(select(data, -LOCATION_ID))),
        numericInput('clusters', 'Cluster count', 3, min = 1, max = 9)
       )
     ),
@@ -60,12 +42,12 @@ shinyUI(fluidPage(
   fluidRow(
     wellPanel(
     h2("Stores"),  
-    div(tableOutput('table2'), style = "font-size:70%")
+    div(dataTableOutput('table2'), style = "font-size:70%"),
+    selectInput("dataset", "Choose a dataset:", choices = c("table1", "table2")),
+    downloadButton('downloadData', 'Download')
     )
   )
   
 )) 
-         
-
 
 
