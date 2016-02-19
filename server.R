@@ -40,16 +40,19 @@ shinyServer(function(input, output, session) {
     table1 <- data.frame(Stores = clusters()$size, clusters()$centers)
   )
   
+  table2 <- reactive({
+    inner_join(data.frame(LOCATION_ID=data$LOCATION_ID, CLUSTER = clusters()$cluster), location_dim)
+    })
   
   output$table2 <- renderDataTable({
-    table2 <- inner_join(data.frame(LOCATION_ID=data$LOCATION_ID, CLUSTER = clusters()$cluster), location_dim)
+    table2()
   }
   )
   
   output$downloadData <- downloadHandler(
     filename = function() { paste(input$dataset, '.csv', sep='') },
     content = function(file) {
-      write.csv(datasetInput(), file)
+      write.csv(table2(), file)
     }
   )
   
